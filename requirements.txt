@@ -1,2 +1,5 @@
 cryptography>=42,<44
 pytest>=8,<9
+liboqs-python==0.16.0.1
+cryptography
+pytest==9.1.1
