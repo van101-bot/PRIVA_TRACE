@@ -1,0 +1,22 @@
+project:
+  name: SIH26237
+  environment: development
+
+crypto:
+  kem_algorithm: ML-KEM-768
+  signature_algorithm: ML-DSA-65
+  symmetric_cipher: AES-256-GCM
+
+qkd:
+  enabled: false
+  mode: simulator
+
+hsm:
+  enabled: false
+  mode: simulator
+
+zkp:
+  enabled: false
+
+storage:
+  backend: sqlite
