@@ -1,4 +1,4 @@
-# SIH26237 — Cryptographic Attribution and Immutable Decryption Provenance
+# PRIVA-TRACE — Cryptographic Attribution and Immutable Decryption Provenance
 
 ## Smart India Hackathon 2026
 
