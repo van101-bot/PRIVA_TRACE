@@ -383,7 +383,7 @@ function App() {
 
             <div>
               <strong>QKD CHANNEL</strong>
-              <small>Quantum Secure</small>
+              <small>Simulated</small>
             </div>
           </div>
 
