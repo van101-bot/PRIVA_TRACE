@@ -88,3 +88,19 @@ public.json
 
 .DS_Store
 Thumbs.db
+.env
+.jwt_secret
+*.key
+*.pem
+*.db
+*.sqlite3
+storage/
+certs/
+batch*_out/
+ml/model/
+*.pth
+.pytest_cache/
+__pycache__/
+*.pyc
+node_modules/
+out/
