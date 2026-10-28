@@ -1,4 +1,4 @@
-﻿import logging
+import logging
 
 from fastapi import Depends, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
@@ -123,9 +123,7 @@ app.include_router(revocation_router, **guarded("revocation", 30))
 app.include_router(access_log_router, **guarded("access-log", 30))
 app.include_router(provenance_router, **guarded("provenance", 60))
 app.include_router(qkd_status_router, **guarded("qkd-status", 60))
-@app.get("/")
-def home():
-    return {"message": "SIH26237 Backend is running!"}
+
 
 
 @app.get("/health")
@@ -134,3 +132,10 @@ def health_check():
         "status": "ok",
         "service": "SIH26237 Backend",
     }
+
+from pathlib import Path
+from fastapi.staticfiles import StaticFiles
+
+_web = Path(__file__).parent / "frontend" / "out" / "renderer"
+if _web.exists():
+    app.mount("/", StaticFiles(directory=_web, html=True), name="web")

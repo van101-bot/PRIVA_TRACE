@@ -1,7 +1,7 @@
 // Real SIH26237 backend client (FastAPI + JWT).
 // Config comes from frontend/.env (electron-vite only exposes RENDERER_VITE_* to the renderer).
 const env = (import.meta as unknown as { env: Record<string, string | undefined> }).env
-const API_BASE_URL = env.RENDERER_VITE_API_URL ?? 'http://127.0.0.1:8001'
+const API_BASE_URL = env.RENDERER_VITE_API_URL ?? ''
 
 let token: string | null = null
 
@@ -78,9 +78,18 @@ const post = (body: unknown): RequestInit => ({
 })
 
 // ---------- auth ----------
+function askCred(key: string, label: string): string {
+  let v = sessionStorage.getItem(key)
+  if (!v) {
+    v = window.prompt(label) ?? ''
+    if (v) sessionStorage.setItem(key, v)
+  }
+  return v
+}
+
 export async function login(username?: string, password?: string): Promise<boolean> {
-  const u = username ?? env.RENDERER_VITE_API_USER ?? ''
-  const p = password ?? env.RENDERER_VITE_API_PASSWORD ?? ''
+  const u = username ?? env.RENDERER_VITE_API_USER ?? askCred('api_user', 'Username')
+  const p = password ?? env.RENDERER_VITE_API_PASSWORD ?? askCred('api_pass', 'Password')
   if (!u || !p) throw new Error('No API credentials: set RENDERER_VITE_API_USER and RENDERER_VITE_API_PASSWORD in .env')
   const data = await request('/auth/login', post({ username: u, password: p }), false)
   token = data.access_token
@@ -204,3 +213,16 @@ export async function getLedgerEvents(): Promise<LedgerEvent[]> {
     time: new Date(r.created_at).toLocaleTimeString()
   }))
 }
+
+export type ChainRecord = {
+  sequence: number
+  event: string | null
+  watermark_id: string | null
+  own: boolean
+  document_hash: string | null
+  timestamp: number
+  previous_hash: string
+  record_hash: string
+}
+export const getChainRecords = (limit = 20): Promise<ChainRecord[]> =>
+  request('/ledger-chain/records?limit=' + limit)
